@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>LOGIN</h3>
+
+<form method="post">
+   {% csrf_token %}
+    <p>{{ form.as_p}}</p>
+<button type="submit">OK</button>
+Agar royxatdan otmagan bo'lsangiz
+    <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+
+</form>
+{% endblock %}

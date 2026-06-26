@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>PROFILE </h3>
+<p>Username: {{ profile.user.username }}</p>
+<p>Phone: {{ profile.user.phone }}</p>
+<p>age: {{ profile.age }}</p>
+<p>bio: {{ profile.bio }}</p>
+{% if profile.avtar %}
+
+<img src="{{ profile.avtar.url }}" width="200" height="300">
+{% else %}
+<p>Rasmsiz </p>
+{% endif %}
+<a href="{% url 'edit-profile' %}">edit</a>
+
+{% endblock %}
