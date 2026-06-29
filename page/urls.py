@@ -1,8 +1,13 @@
 from django.urls import path
-from .views import get_site,get_ali,get_news
+from  .views import get_news,create_news,get_new,update_new,delete_new
 
 urlpatterns=[
     path('',get_news,name='list'),
-    path('site/',get_site,name='site'),
-    path('ali/',get_ali,name='ali'),
+    path('create/',create_news,name='create-news'),
+    path('detail/<int:pk>/',get_new,name='detail-news'),
+    path('update/<int:pk>/',update_new,name='update-news'),
+    path('delete/<int:pk>/',delete_new,name='delete-news'),
+
+
+
 ]

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+<form method="post">
+   {% csrf_token %}
+  <p>Siz rostan ham mana shu <b>{{ new.title }}</b> nomli yangilikni ochirmoqchimisiz?</p>
+<button type="submit">Ha</button>
+
+</form>
+<a href="{% url 'list' %}">back </a>
+{% endblock %}

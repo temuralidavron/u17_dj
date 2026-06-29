@@ -6,6 +6,12 @@ from django.utils.translation.template import block_re
 # Create your models here.
 
 class CustomUser(AbstractUser):
+    ROLE_CHOICES = (
+        ('admin', 'Admin'),
+        ('manager', 'Manager'),
+        ('reader', 'Reader'),
+    )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='reader')
     phone=models.CharField(max_length=15)
 
 
