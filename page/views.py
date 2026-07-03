@@ -1,5 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.permissions import  checking_admin
 from .models import News
@@ -69,5 +70,23 @@ def delete_new(request,pk):
 
 
 
+# like
+@login_required
+def like_new(request, pk):
+    new = get_object_or_404(News, pk=pk)
 
+    if request.user in new.likes.all():
+        new.likes.remove(request.user)  # unlike
+    else:
+        new.likes.add(request.user)  # like
+
+    return redirect("detail-news", pk=pk)
+
+
+
+
+@login_required
+def profile(request):
+    liked_news = request.user.liked_news.all()
+    return render(request, "accounts/like_profile.html", {"liked_news": liked_news})
 

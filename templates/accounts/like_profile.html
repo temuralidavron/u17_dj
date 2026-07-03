@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{{ user.username }} profili</h2>
+
+<h3>Like bosgan mahsulotlaringiz:</h3>
+<ul>
+    {% for p in liked_news %}
+    <p>{{ p.id}}</p>
+        <li>{{ p.title }} ({{ p.content }})</li>
+    <hr>
+    {% empty %}
+        <p>Hech qaysi productga like bosmagansiz 😔</p>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -184,4 +184,18 @@ Back                    </a>
 
 </div>
 
+
+<h2>{{ new.title }}</h2>
+<p>Narxi: {{ new.content }}</p>
+
+<form method="post" action="{% url 'like_new' new.id %}">
+    {% csrf_token %}
+    {% if user in new.likes.all %}
+        <button type="submit">💔 Unlike</button>
+    {% else %}
+        <button type="submit">❤️ Like</button>
+    {% endif %}
+</form>
+
+<p>Likes soni: {{ new.likes.count }}</p>
 {% endblock %}
