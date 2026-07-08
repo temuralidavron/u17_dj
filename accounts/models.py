@@ -23,3 +23,6 @@ class Profile(models.Model):
     bio=models.TextField(blank=True,null=True)
 
 
+class Code(models.Model):
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='codes')
+    code=models.CharField(max_length=6,default=)

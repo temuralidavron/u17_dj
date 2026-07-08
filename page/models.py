@@ -1,7 +1,6 @@
 from django.db import models
 
 from accounts.models import CustomUser
-from page.views import like_new
 
 
 # Create your models here.

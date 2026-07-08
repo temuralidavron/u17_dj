@@ -1,9 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 
-from accounts.forms import RegistrationForm, LoginForm, ProfileForm
+from accounts.forms import RegistrationForm, LoginForm, ProfileForm, RessetPasswordForm
 from accounts.models import Profile
+from accounts.utils import send_login_email
+from config import settings
 
 
 # Create your views here.
@@ -13,7 +16,16 @@ def register_view(request):
         if form.is_valid():
             password=form.cleaned_data.get('password')
             user=form.save()
+            send_mail(
+                subject="Assalomu alekum Wellcome ",
+                message="Siz bizda productlar sotib olishiz mumkin",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=['anvartop008@gmail.com','isfan13082010@gmail.com',user.email],
+                fail_silently=False
+
+            )
             Profile.objects.create(user=user)
+
             user = authenticate(username=user.username, password=password)
             if user:
                 print(user)
@@ -37,6 +49,7 @@ def login_view(request):
             user=authenticate(username=username,password=password)
             if user is not None:
                 login(request,user)
+                send_login_email(user)
                 return redirect('list')
             else:
                 return redirect('register')
@@ -84,6 +97,18 @@ def edit_profile(request):
 
 
 
-# profile
+# forgetpassword
 
+def send_email_code(request):
+    if request.method=='POST':
+        form=RessetPasswordForm(request.POST)
+        if form.is_valid():
+            user=authenticate(username=form.cleaned_data.get('username'),password=form.cleaned_data.get('password'))
+            if user:
+                send_login_email(user)
+
+
+    else:
+        form=RessetPasswordForm()
+    return render(request,"accounts/resset_password.html")
 

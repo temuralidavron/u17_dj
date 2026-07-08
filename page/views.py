@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.permissions import  checking_admin
-from .models import News
+from page.models import News
+
+
+# from .models import News
 # Create your views here.
 
 
