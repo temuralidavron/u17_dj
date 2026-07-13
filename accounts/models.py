@@ -1,6 +1,10 @@
+from datetime import timedelta, datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation.template import block_re
+
+from accounts.utils import create_code
 
 
 # Create your models here.
@@ -25,4 +29,7 @@ class Profile(models.Model):
 
 class Code(models.Model):
     user=models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='codes')
-    code=models.CharField(max_length=6,default=)
+    code=models.CharField(max_length=6,default=create_code)
+    expire_time=models.DateTimeField(default=datetime.now()+timedelta(minutes=2))
+
+

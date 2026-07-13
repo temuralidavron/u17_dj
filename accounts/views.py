@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 
-from accounts.forms import RegistrationForm, LoginForm, ProfileForm, RessetPasswordForm
-from accounts.models import Profile
+from accounts.forms import RegistrationForm, LoginForm, ProfileForm, RessetPasswordForm, DonePasswordForm
+from accounts.models import Profile, Code, CustomUser
 from accounts.utils import send_login_email
 from config import settings
 
@@ -100,15 +102,49 @@ def edit_profile(request):
 # forgetpassword
 
 def send_email_code(request):
+
     if request.method=='POST':
+        print('nima')
         form=RessetPasswordForm(request.POST)
         if form.is_valid():
-            user=authenticate(username=form.cleaned_data.get('username'),password=form.cleaned_data.get('password'))
+            user=CustomUser.objects.get(username=form.cleaned_data.get('username'),email=form.cleaned_data.get('email'))
+            print(user)
             if user:
-                send_login_email(user)
+                code=Code.objects.create(user=user)
 
 
+
+                send_login_email(user,code.code)
+                print('salom',user.username)
+                return redirect("send")
     else:
         form=RessetPasswordForm()
-    return render(request,"accounts/resset_password.html")
+    return render(request,"accounts/resset_password.html",{'form':form})
 
+
+
+def done_password(request):
+    username = request.GET.get("name", "").rstrip("/")
+    print(username)
+    if request.method=='POST':
+        form=DonePasswordForm(request.POST)
+        if form.is_valid():
+            password=form.cleaned_data.get('new_password')
+            code=form.cleaned_data.get('code')
+            user=CustomUser.objects.get(username=username)
+            print(user,"shu user")
+            print(code,'user yozgan code')
+            if user:
+                code_user=Code.objects.filter(user=user,code=code,expire_time__gt=datetime.now()).first()   # 18:22 18:21
+                print(code_user.code,'bazadagi code')
+                if code_user:
+                    user.set_password(password)
+                    user.save()
+                    login(request, user)
+                    return redirect('list')
+                else:
+                    return redirect('login')
+    else:
+
+        form=DonePasswordForm()
+    return render(request,'accounts/dane.html',{'form':form })

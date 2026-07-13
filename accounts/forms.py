@@ -45,4 +45,16 @@ class RessetPasswordForm(forms.Form):
     email=forms.EmailField()
 
 
+class DonePasswordForm(forms.Form):
+    code=forms.CharField(max_length=6)
+    new_password=forms.CharField(max_length=150)
+    re_password=forms.CharField(max_length=150)
+
+    def clean(self):
+        data=super().clean()
+        new_password=self.data.get('new_password')
+        re_password=self.data.get('re_password')
+        if new_password!=re_password:
+            raise forms.ValidationError("parolaringiz bir birga mos emas")
+        return data
 
