@@ -26,7 +26,7 @@ def register_view(request):
                 fail_silently=False
 
             )
-            Profile.objects.create(user=user)
+            # Profile.objects.create(user=user)
 
             user = authenticate(username=user.username, password=password)
             if user:
